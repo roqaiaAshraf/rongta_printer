@@ -47,18 +47,30 @@ Future<Uint8List> createImageFromWidget(
     ..buildScope(rootElement)
     ..finalizeTree();
 
-  ui.FlutterView view = View.of(context);
+  // ui.FlutterView view = View.of(context);
 
-  final RenderView renderView = RenderView(
+  // final RenderView renderView = RenderView(
+  //   view: view,
+  //   child: RenderPositionedBox(
+  //     alignment: Alignment.center,
+  //     child: repaintBoundary,
+  //   ),
+  //   configuration: ViewConfiguration(
+  //     size: Size(docWidth, docHeight),
+  //     devicePixelRatio: view.devicePixelRatio,
+  //   ),
+  // );
+  final view = WidgetsBinding.instance.platformDispatcher.views.first;
+
+  final renderView = RenderView(
     view: view,
-    child: RenderPositionedBox(
-      alignment: Alignment.center,
-      child: repaintBoundary,
-    ),
     configuration: ViewConfiguration(
-      size: Size(docWidth, docHeight),
       devicePixelRatio: view.devicePixelRatio,
+      physicalConstraints: BoxConstraints.tight(
+        Size(docWidth, docHeight),
+      ),
     ),
+    child: repaintBoundary,
   );
 
   final PipelineOwner pipelineOwner = PipelineOwner()..rootNode = renderView;
